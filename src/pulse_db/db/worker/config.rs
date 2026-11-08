@@ -39,10 +39,10 @@ pub enum WorkerConfigError {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum LogLevel {
-    Debug,
-    Info,
-    Warn,
-    Error,
+    DEBUG,
+    INFO,
+    WARN,
+    ERROR,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -55,8 +55,10 @@ impl WorkerConfig {
     pub fn from_file(file_path: String) -> Result<Self, WorkerConfigError> {
         let file = std::fs::File::open(file_path)?;
         let reader = std::io::BufReader::new(file);
+
         let config: Self = serde_json::from_reader(reader)?;
         config.validate()?;
+
         Ok(config)
     }
 
@@ -66,10 +68,10 @@ impl WorkerConfig {
 
     pub fn log_level(&self) -> tracing::Level {
         match self.log_level {
-            LogLevel::Debug => tracing::Level::DEBUG,
-            LogLevel::Info => tracing::Level::INFO,
-            LogLevel::Warn => tracing::Level::WARN,
-            LogLevel::Error => tracing::Level::ERROR,
+            LogLevel::DEBUG => tracing::Level::DEBUG,
+            LogLevel::INFO => tracing::Level::INFO,
+            LogLevel::WARN => tracing::Level::WARN,
+            LogLevel::ERROR => tracing::Level::ERROR,
         }
     }
 }

@@ -1,0 +1,4 @@
+{
+  "log_level": "INFO",
+  "server_address": "0.0.0.0:7001"
+}
