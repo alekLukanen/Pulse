@@ -1,0 +1,23 @@
+syntax = "proto3";
+package pulse;
+
+// -----------------------------------------
+
+message ConnectWorkerRequest {
+  string name = 1;
+}
+
+message ConnectWorkerResponse {
+  // uuid
+  string id = 1; 
+}
+
+service PulseConnect {
+  rpc ConnectWorker(ConnectWorkerRequest) returns (ConnectWorkerResponse);
+}
+
+// -----------------------------------------
+
+// service PulseClient {
+  
+// }
