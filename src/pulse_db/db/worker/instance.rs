@@ -4,10 +4,14 @@ use tokio_util::sync::CancellationToken;
 use tonic::transport::Server;
 use tracing::info;
 
-use crate::pulse_db::{
-    db::worker::config::WorkerConfig,
-    rpc::v1::{
-        proto::pulse::pulse_connect_server::PulseConnectServer, server::pulse::PulseConnectService,
+use crate::{
+    pkg::tokio_helpers,
+    pulse_db::{
+        db::worker::config::WorkerConfig,
+        rpc::v1::{
+            proto::pulse::pulse_connect_server::PulseConnectServer,
+            server::pulse::PulseConnectService,
+        },
     },
 };
 
@@ -29,6 +33,8 @@ impl Worker {
     }
 
     pub async fn run(&self, ct: CancellationToken) -> Result<(), WorkerError> {
+        tokio_helpers::cancel_on_ctrl_c(ct.clone());
+
         let addr: SocketAddr = self.config.server_address.parse()?;
 
         let pulse_connect = PulseConnectServer::new(PulseConnectService::new())

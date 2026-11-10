@@ -1,3 +1,5 @@
+use tracing::info;
+
 use crate::pulse_db::rpc::v1::proto::pulse;
 
 #[derive(Debug, Default)]
@@ -17,8 +19,13 @@ impl PulseConnectService {
 impl pulse::pulse_connect_server::PulseConnect for PulseConnectService {
     async fn connect_worker(
         &self,
-        _request: tonic::Request<pulse::ConnectWorkerRequest>,
+        request: tonic::Request<pulse::ConnectWorkerRequest>,
     ) -> std::result::Result<tonic::Response<pulse::ConnectWorkerResponse>, tonic::Status> {
+        info!(
+            "received connection request from: {}",
+            request.into_inner().name
+        );
+
         Ok(tonic::Response::new(pulse::ConnectWorkerResponse {
             id: String::new(),
         }))

@@ -1,0 +1,5 @@
+{
+  "log_level": "INFO",
+  "server_address": "http://127.0.0.1:7001",
+  "name": "pulse-worker"
+}

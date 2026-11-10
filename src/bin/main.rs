@@ -55,17 +55,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
     info!("--- Starting PulseDB ---");
 
     let ct = CancellationToken::new();
-
-    // cancel the token on ctrl-c so the worker shuts down gracefully
-    let signal_ct = ct.clone();
-    tokio::spawn(async move {
-        match tokio::signal::ctrl_c().await {
-            Ok(()) => info!("received ctrl-c, shutting down"),
-            Err(err) => error!("failed to listen for ctrl-c: {:?}", err),
-        }
-        signal_ct.cancel();
-    });
-
     let worker = Worker::new(worker_config);
     if let Err(err) = worker.run(ct.child_token()).await {
         error!("{:?}", err);
